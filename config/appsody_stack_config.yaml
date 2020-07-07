@@ -3,7 +3,7 @@ name: CP4A Stack Hub
 description: This is the default stack hub for CP4A
 version: milestone-11
 stacks:
-  - name: kabanero-stack-hub
+  - name: icp4apps-stack-hub
     repos:
       - url: https://github.com/kabanero-io/collections/releases/download/0.9.0-rc.1/java-spring-boot2-0.3.29-index.yaml
       - url: https://github.com/kabanero-io/collections/releases/download/0.9.0-rc.1/nodejs-0.3.6-index.yaml
