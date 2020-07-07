@@ -12,7 +12,7 @@ before_install:
 
 script:
   - ./scripts/hub_build.sh appsody_stack_config.yaml
-  - ./scripts/crd_build.sh odo_stack_config.yaml
+  - ./scripts/crd_build.sh devfile_stack_config.yaml
   - ./scripts/list_artifacts.sh
 
 deploy:
