@@ -1,0 +1,10 @@
+# Configuration for CP4A application stack CRD creation
+name: CP4A stack CRDs
+description: A configuration file to generate stack CRDs for the default application stacks.
+version: milestone-11
+stack_groups:
+  - name: icp4apps
+    repos:
+      - url: https://raw.githubusercontent.com/odo-devfiles/registry/master/devfiles/index.json
+        include: 
+          - nodejs
