@@ -38,5 +38,7 @@ if [ -f "$build_dir/image-mapping.txt" ]; then
 fi 
 
 # deploy nginx container
-echo "= Deploying stack hub index container into your cluster."
-oc apply -f "$build_dir/openshift.yaml"
+if [ -f "$build_dir/openshift.yaml" ]; then
+    echo "= Deploying stack hub index container into your cluster."
+    oc apply -f "$build_dir/openshift.yaml"
+fi
