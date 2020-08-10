@@ -43,10 +43,10 @@ where:
 `version:` is a version for the configuration, may align with a repository release.  
 `stacks: - name:` is the name of a repository to be built.  
 `stacks:   repos:` is an array of urls to stack indexes / repositories to be included in this repository index  
-`stacks:   repos:    -url:    exclude:` is an array of stack names to exclude from the refrenced stack repository. This field is optional and should be left blank if filtering is not required.  
-`stacks:   repos:    -url:    include:` is an array of stack names to include from the refrenced stack repository. This field is optional and should be left blank if filtering is not required.  
-`image-org:` is the name of the organisation within the image registry which will store the docker images for included stacks. This field is optional and controls the behaviour of the repository build, further details are avalable below.  
-`image-registry:` is the url of the image registry being used to store stack docker images. This field is optional and controls the behaviour of the repository build, further details are avalable below.  
+`stacks:   repos:    -url:    exclude:` is an array of stack names to exclude from the referenced stack repository. This field is optional and should be left blank if filtering is not required.  
+`stacks:   repos:    -url:    include:` is an array of stack names to include from the referenced stack repository. This field is optional and should be left blank if filtering is not required.  
+`image-org:` is the name of the organisation within the image registry which will store the docker images for included stacks. This field is optional and controls the behaviour of the repository build, further details are available below.  
+`image-registry:` is the url of the image registry being used to store stack docker images. This field is optional and controls the behaviour of the repository build, further details are available below.  
 `nginx-image-name:` is the name assigned to the generated nginx image, defaults to repo-index.   
 
 **NOTE -** `exclude`/`include` are mutually exclusive, if both fields are populated an error will be thrown.
@@ -82,8 +82,8 @@ where:
 `version:` is a version for the configuration, may align with a repository release.  
 `stack_groups: - name:` is the name of a stack group to be built.  
 `stacks:   repos:` is an array of urls to devfile registries containing devfile stacks to be included in this stack group.  
-`stacks:   repos:    -url:    exclude:` is an array of stack names to exclude from the refrenced devfile registry. This field is optional and should be left blank if filtering is not required.  
-`stacks:   repos:    -url:    include:` is an array of stack names to include from the refrenced devfile registry. This field is optional and should be left blank if filtering is not required.  
+`stacks:   repos:    -url:    exclude:` is an array of stack names to exclude from the referenced devfile registry. This field is optional and should be left blank if filtering is not required.  
+`stacks:   repos:    -url:    include:` is an array of stack names to include from the referenced devfile registry. This field is optional and should be left blank if filtering is not required.  
 
 **NOTE -** `exclude`/`include` are mutually exclusive, if both fields are populated an error will be thrown.
 
@@ -93,7 +93,7 @@ You can find an [example configuration](https://github.com/appsody/repo-tools/bl
 The stack hub can be built manually or via a CI pipeline such as Travis.
 
 ### Building the Stack Hub manually
-When building the Stack Hub manually any generated index files or CRD groupings will be written to the '`assets` folder at the bsase directory of the Stack Hub repository.
+When building the Stack Hub manually any generated index files or CRD groupings will be written to the '`assets` folder at the base directory of the Stack Hub repository.
 
 To generate assets for your stack hub you need to execute the relevant build script passing the name of your configuration file. To generate assets for both types of configuration run both build scripts.
 

@@ -29,6 +29,20 @@ image_mirror() {
     oc image mirror -f "$file" --insecure
 }
 
+get_route() {
+    for i in 1 2 3 4 5 6 7 8 9 10; do
+        ROUTE=$(oc get route stack-hub-index --no-headers -o=jsonpath='{.status.ingress[0].host}')
+        if [ -z "$ROUTE" ]; then
+            sleep 1
+        else
+            echo "http://$ROUTE"
+            return
+        fi
+    done
+    echo "Unable to get route for stack-hub-index"
+    exit 1
+}
+
 # check needed tools are installed
 prereqs
 
@@ -53,4 +67,7 @@ fi
 if [ -f "$build_dir/openshift.yaml" ]; then
     echo "= Deploying stack hub index container into your cluster."
     oc apply -f "$build_dir/openshift.yaml"
+
+    STACK_HUB_ROUTE=$(get_route)
+    echo "== Your stack hub index is available at: $STACK_HUB_ROUTE/icp4apps-stack-hub-index.yaml"
 fi
