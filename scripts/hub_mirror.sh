@@ -7,7 +7,7 @@ build_dir="${base_dir}/build/appsody_stacks"
 
 image_push() {
     local name=$@
-    echo "Pushing $name"
+    echo "== Pushing $name"
     if [ "$USE_BUILDAH" == "true" ]; then
         buildah push --tls-verify=false $name
     else
@@ -22,6 +22,7 @@ image_mirror() {
 
 # push nginx image
 if [ -f "$build_dir/image_list" ]; then
+    echo "= Pushing stack hub index image into your registry."
     while read line
     do
         if [ "$line" != "" ]; then
@@ -32,8 +33,10 @@ fi
 
 # mirror stack images
 if [ -f "$build_dir/image-mapping.txt" ]; then
+    echo "= Mirroring stack and related images into your registry."
     image_mirror "$build_dir/image-mapping.txt"
 fi 
 
 # deploy nginx container
+echo "= Deploying stack hub index container into your cluster."
 oc apply -f "$build_dir/openshift.yaml"
