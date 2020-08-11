@@ -18,7 +18,7 @@ openshift_deployment() {
     INIT_IMAGE="$image_registry/$image_org/$(echo $SRC_INIT_IMAGE | cut -d'/' -f3)"
 
     YAML_FILE=$build_dir/openshift.yaml
-    cp $base_dir/openshift/k8s.yaml $build_dir/openshift.yaml
+    cp $base_dir/openshift/k8s.yaml $YAML_FILE
     sed -i -e "s|NGINX_IMAGE|$image_registry/$image_org/${nginx_image_name}:${INDEX_VERSION}|" $YAML_FILE
     sed -i -e "s|INIT_IMAGE|$INIT_IMAGE|" $YAML_FILE
     sed -i -e "s|DATE|$(date --utc '+%FT%TZ')|" $YAML_FILE

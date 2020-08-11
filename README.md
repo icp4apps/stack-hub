@@ -108,7 +108,7 @@ If building from a Devfile configuration:
 #### Releasing a manually built stack hub
 Once you have your generated assets you can host them in a location where they can be accessed by anyone that requires access. If your build was configured to generate an NGINX image then you will need to push it to the image registry it was built for.
 
-Use the `./scripts/hub_mirror.sh` command to push the NGINX image to your image registry along with all the referenced stack images. The command will also deploy the `stack-hub-index` container in your OpenShift cluster. The command requires that you have `docker` or `podman` installed and you are logged in to your container registry. The command also requires that you have the `oc` command installed and that you are logged in to your OpenShift cluster.
+Use the `./scripts/hub_deploy.sh` command to push the NGINX image to your image registry along with all the referenced stack images. The command will also deploy the `stack-hub-index` container in your OpenShift cluster. The command requires that you have `docker` or `podman` installed and you are logged in to your container registry. The command also requires that you have the `oc` command installed and that you are logged in to your OpenShift cluster.
 
 ### Build and release the Stack Hub using Travis CI
 repo-tools includes a template configuration file for use with Travis CI [here](./templates/template_travis_ci.yml). To use the template follow these steps:
