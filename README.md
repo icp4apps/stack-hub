@@ -43,19 +43,19 @@ where:
 `version:` is a version for the configuration, may align with a repository release.  
 `stacks: - name:` is the name of a repository to be built.  
 `stacks:   repos:` is an array of urls to stack indexes / repositories to be included in this repository index  
-`stacks:   repos:    -url:    exclude:` is an array of stack names to exclude from the refrenced stack repository. This field is optional and should be left blank if filtering is not required.  
-`stacks:   repos:    -url:    include:` is an array of stack names to include from the refrenced stack repository. This field is optional and should be left blank if filtering is not required.  
-`image-org:` is the name of the organisation within the image registry which will store the docker images for included stacks. This field is optional and controls the behaviour of the repository build, further details are avalable below.  
-`image-registry:` is the url of the image registry being used to store stack docker images. This field is optional and controls the behaviour of the repository build, further details are avalable below.  
+`stacks:   repos:    -url:    exclude:` is an array of stack names to exclude from the referenced stack repository. This field is optional and should be left blank if filtering is not required.  
+`stacks:   repos:    -url:    include:` is an array of stack names to include from the referenced stack repository. This field is optional and should be left blank if filtering is not required.  
+`image-org:` is the name of the organisation within the image registry which will store the docker images for included stacks. This field is optional and controls the behaviour of the repository build, further details are available below.  
+`image-registry:` is the url of the image registry being used to store stack docker images. This field is optional and controls the behaviour of the repository build, further details are available below.  
 `nginx-image-name:` is the name assigned to the generated nginx image, defaults to repo-index.   
 
 **NOTE -** `exclude`/`include` are mutually exclusive, if both fields are populated an error will be thrown.
 
 #### Composition of public stacks / repositories.
-If the stacks and repositories you are including are all publically available then repo-tools can simply compose a new repository file that uses references to the existing stack asset locations. When this type of build is required simply leave the `image-org` and `image-registry` fields of your configuration empty. The composed repository files will be stored in the `assets` folder generated when the tools are run.
+If the stacks and repositories you are including are all publicly available then repo-tools can simply compose a new repository file that uses references to the existing stack asset locations. When this type of build is required simply leave the `image-org` and `image-registry` fields of your configuration empty. The composed repository files will be stored in the `assets` folder generated when the tools are run.
 
 #### Packaging private stacks / repositories.
-If your stacks / repositories are hosted in a private environment that your deployment environment and tools cannot access, such as GitHub Enterprise,  you can leverage the repo-tools to create an NGINX image that can serve the assets required to make use of your stacks from within the deployment environment. When this type of build is required configure the `image-org` field to be the name of the org within your target registry and the `image-registry` field to be the URL of the actual registry the images will be placed in. You can optionally configure the name of the resulting image using the `nginx-image-name` field. Once run your local docker registry will contain the generated NGINX image which can be pushed to the registry your deployment environment will access. Once deployed the image will server the repository index files that were created as part of the build.
+If your stacks / repositories are hosted in a private environment that your deployment environment and tools cannot access, such as GitHub Enterprise,  you can leverage the repo-tools to create an NGINX image that can serve the assets required to make use of your stacks from within the deployment environment. When this type of build is required configure the `image-org` field to be the name of the org within your target registry and the `image-registry` field to be the URL of the actual registry the images will be placed in. You can optionally configure the name of the resulting image using the `nginx-image-name` field. Once run your local docker registry will contain the generated NGINX image which can be pushed to the registry your deployment environment will access. Once deployed the image will serve the repository index files that were created as part of the build.
 
 You can find an [example configuration](https://github.com/appsody/repo-tools/blob/master/example_config/example_repo_config_appsody_stacks.yaml) within the example_config folder.
 
@@ -82,8 +82,8 @@ where:
 `version:` is a version for the configuration, may align with a repository release.  
 `stack_groups: - name:` is the name of a stack group to be built.  
 `stacks:   repos:` is an array of urls to devfile registries containing devfile stacks to be included in this stack group.  
-`stacks:   repos:    -url:    exclude:` is an array of stack names to exclude from the refrenced devfile registry. This field is optional and should be left blank if filtering is not required.  
-`stacks:   repos:    -url:    include:` is an array of stack names to include from the refrenced devfile registry. This field is optional and should be left blank if filtering is not required.  
+`stacks:   repos:    -url:    exclude:` is an array of stack names to exclude from the referenced devfile registry. This field is optional and should be left blank if filtering is not required.  
+`stacks:   repos:    -url:    include:` is an array of stack names to include from the referenced devfile registry. This field is optional and should be left blank if filtering is not required.  
 
 **NOTE -** `exclude`/`include` are mutually exclusive, if both fields are populated an error will be thrown.
 
@@ -93,7 +93,7 @@ You can find an [example configuration](https://github.com/appsody/repo-tools/bl
 The stack hub can be built manually or via a CI pipeline such as Travis.
 
 ### Building the Stack Hub manually
-When building the Stack Hub manually any generated index files or CRD groupings will be written to the '`assets` folder at the bsase directory of the Stack Hub repository.
+When building the Stack Hub manually any generated index files or CRD groupings will be written to the '`assets` folder at the base directory of the Stack Hub repository.
 
 To generate assets for your stack hub you need to execute the relevant build script passing the name of your configuration file. To generate assets for both types of configuration run both build scripts.
 
@@ -107,6 +107,8 @@ If building from a Devfile configuration:
 
 #### Releasing a manually built stack hub
 Once you have your generated assets you can host them in a location where they can be accessed by anyone that requires access. If your build was configured to generate an NGINX image then you will need to push it to the image registry it was built for.
+
+Use the `./scripts/hub_deploy.sh` command to push the NGINX image to your image registry along with all the referenced stack images. The command will also deploy the `stack-hub-index` container in your OpenShift cluster. The command requires that you have `docker` or `podman` installed and you are logged in to your container registry. The command also requires that you have the `oc` command installed and that you are logged in to your OpenShift cluster.
 
 ### Build and release the Stack Hub using Travis CI
 repo-tools includes a template configuration file for use with Travis CI [here](./templates/template_travis_ci.yml). To use the template follow these steps:

@@ -13,13 +13,22 @@ image_build() {
     fi
 }
 
+openshift_deployment() {
+    SRC_INIT_IMAGE="docker.io/icp4apps/pipelines-utils:0.16.0-rc.1"
+    INIT_IMAGE="$image_registry/$image_org/$(echo $SRC_INIT_IMAGE | cut -d'/' -f3)"
+
+    YAML_FILE=$build_dir/openshift.yaml
+    cp $base_dir/openshift/k8s.yaml $YAML_FILE
+    sed -i -e "s|NGINX_IMAGE|$image_registry/$image_org/${nginx_image_name}:${INDEX_VERSION}|" $YAML_FILE
+    sed -i -e "s|INIT_IMAGE|$INIT_IMAGE|" $YAML_FILE
+    sed -i -e "s|DATE|$(date --utc '+%FT%TZ')|" $YAML_FILE
+
+    mapping_file=$build_dir/image-mapping.txt
+    grep -qxF "$SRC_INIT_IMAGE=$INIT_IMAGE" "$mapping_file" || echo "$SRC_INIT_IMAGE=$INIT_IMAGE" >> "$mapping_file"
+}
+
 if [ ! -z $BUILD ] && [ $BUILD == true ]
 then
-    if [ -z "$INDEX_IMAGE" ]
-    then
-        export INDEX_IMAGE=kabanero-index
-    fi
-
     if [ -z "$INDEX_VERSION" ]
     then
         export INDEX_VERSION=SNAPSHOT
@@ -45,7 +54,7 @@ then
 
     if [ "${nginx_image_name}" == "null" ]
     then
-        nginx_image_name="repo-index"
+        nginx_image_name="stack-hub-index"
     fi
 
     echo "BUILDING: $image_org/${nginx_image_name}:${INDEX_VERSION}"
@@ -58,6 +67,9 @@ then
         echo "$image_registry/$image_org/${nginx_image_name}" >> $build_dir/image_list
         echo "$image_registry/$image_org/${nginx_image_name}:${INDEX_VERSION}" >> $build_dir/image_list
         echo "created $image_registry/$image_org/${nginx_image_name}:${INDEX_VERSION}"
+
+        # generate openshift deployment yaml file
+        openshift_deployment
     else
         >&2 echo -e "failed building $image_registry/$image_org/${nginx_image_name}:${INDEX_VERSION}"
         exit 1

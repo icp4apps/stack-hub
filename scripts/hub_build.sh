@@ -94,7 +94,7 @@ then
     mkdir -p ${assets_dir}
     mkdir -p ${build_dir}
 
-    rm $build_dir/image_list > /dev/null 2>&1 
+    rm -f $build_dir/image_list $build_dir/image-mapping.txt
 
     REPO_LIST=""
     INDEX_LIST=""
@@ -102,7 +102,7 @@ then
     image_org=$(yq r ${configfile} image-org)
     image_registry=$(yq r ${configfile} image-registry)
     nginx_image_name=$(yq r ${configfile} nginx-image-name)
-    
+
     if [ "${image_org}" != "null" ] ||  [ "${image_registry}" != "null" ]
     then
         echo "Retrieving and modifying all the assets"
@@ -250,7 +250,12 @@ then
                             yq p -i $one_stack stacks.[+] 
                             if [ ! -z $BUILD ] && [ $BUILD == true ]
                             then
-                                image=$(update_image $(yq r $one_stack stacks[0].image) $(yq r $one_stack stacks[0].id) $(yq r $one_stack stacks[0].version))
+                                src_image=$(yq r $one_stack stacks[0].image)
+                                image=$(update_image $src_image $(yq r $one_stack stacks[0].id) $(yq r $one_stack stacks[0].version))
+                                if [ "$src_image" != "$image" ]; then
+                                    mapping_file=$build_dir/image-mapping.txt
+                                    grep -qxF "$src_image=$image" "$mapping_file" || echo "$src_image=$image" >> "$mapping_file"
+                                fi
                                 yq w -i $one_stack stacks[0].image $image
                             fi
                             yq m -a -i $index_file_temp $one_stack
@@ -289,7 +294,12 @@ then
                                     tar -xzf $prefetch_dir/$filename -C $build_dir/template > /dev/null 2>&1            
                                     if [ -f $build_dir/template/.appsody-config.yaml ]
                                     then 
-                                        image=$(update_image $(yq r $build_dir/template/.appsody-config.yaml stack))
+                                        src_image=$(yq r $build_dir/template/.appsody-config.yaml stack)
+                                        image=$(update_image $src_image)
+                                        if [ "$src_image" != "$image" ]; then
+                                            mapping_file=$build_dir/image-mapping.txt
+                                            grep -qxF "$src_image=$image" "$mapping_file" || echo "$src_image=$image" >> "$mapping_file"
+                                        fi
                                         yq w -i $build_dir/template/.appsody-config.yaml stack $image
                                     fi
                                     tar -czf $prefetch_dir/$filename -C $build_dir/template .
