@@ -56,12 +56,11 @@ download() {
     local url=$1
     local local_file=$2
 
-    if [[ "$url" == "https://github.com/"* ]]; then
-        curl -s -L "$url" -o "$local_file"
-    elif [[ "$url" == "https://github."* ]]; then
-        # assume GHE
+    if [[ ! $url =~ https://github.com/.* ]] && [[ $url =~ https://.*/.*/.*/releases/download/.*/.* ]]; then
+        # use GHE API
         download_ghe_asset "$url" "$local_file"
     else
+        # regular URL
         curl -s -L "$url" -o "$local_file"
     fi
 }
@@ -97,7 +96,7 @@ download_ghe_asset() {
 
     assert_url="$protocol//$host/api/v3/repos/$organization/$repository/releases/assets/$asset_id"
 
-    echo "== fetching $assert_url"
+    echo "=== fetching asset $assert_url"
 
     curl -H "Authorization: token $token" -H 'Accept: application/octet-stream' -sL "$assert_url" -o "$local_file"
 }
