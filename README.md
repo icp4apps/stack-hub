@@ -1,8 +1,8 @@
-# repo-tools
-This repository contains a selection of tools and configuration templates to support the creation and lifecycle of a Stack Hub repository.
+# Cloud Pak for Applications Stack Hub
+This repository provides a default Stack Hub for IBM Cloud Pak for Applications.
 
-## repo-tools structure
-The repo-tools repository contains four folders:
+## repository structure
+The repository contains four folders:
 1) config - This folder is where the configuration file that defines the content of the Stack Hub repository will be placed.
 2) scripts - This folder contains the scripts that will compose the Stack Hub repository
 3) example_config - This folder contains sample configuration files.
@@ -89,7 +89,7 @@ where:
 
 **NOTE -** `exclude`/`include` are mutually exclusive, if both fields are populated an error will be thrown.
 
-You can find an [example configuration](https://github.com/appsody/repo-tools/blob/master/example_config/example_repo_config_defile_stacks.yaml) within the example_config folder.
+You can find an [example configuration](https://github.com/appsody/repo-tools/blob/master/example_config/example_repo_config_devfile_stacks.yaml) within the example_config folder.
 
 ## Building the Stack Hub
 The stack hub can be built manually or via a CI pipeline such as Travis.
