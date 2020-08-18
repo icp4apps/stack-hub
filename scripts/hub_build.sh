@@ -52,6 +52,56 @@ update_image() {
     echo "${image}"
 }
 
+download() {
+    local url=$1
+    local local_file=$2
+
+    if [[ ! $url =~ https://github.com/.* ]] && [[ $url =~ https://.*/.*/.*/releases/download/.*/.* ]]; then
+        # use GHE API
+        download_ghe_asset "$url" "$local_file"
+    else
+        # regular URL
+        curl -s -L "$url" -o "$local_file"
+    fi
+}
+
+download_ghe_asset() {
+    local url=$1
+    local local_file=$2
+
+    IFS='/' read -r -a url_parts <<< "$url"
+    protocol="${url_parts[0]}"
+    host="${url_parts[2]}"
+    organization="${url_parts[3]}"
+    repository="${url_parts[4]}"
+    version="${url_parts[7]}"
+    file="${url_parts[8]}"
+
+    github_api_url="$protocol//$host/api/v3/repos/$organization/$repository/releases/tags/$version"
+    file_query=".assets | map(select(.name == \"$file\"))[0].id"
+
+    # check HOSTNAME_TOKEN environment variable for GHE access token
+    token_env_variable="$(echo ${host}_TOKEN | sed 's|\.|_|g' | sed 's/[a-z]/\U&/g')"
+    token="${!token_env_variable}"
+    if [ -z "$token" ]; then
+        echo "$token_env_variable environment variable is not set."
+        exit 1
+    fi
+
+    asset_id=$(curl -H "Authorization: token $token" -sL $github_api_url | jq "$file_query")
+    if [ -z "$asset_id" ]; then
+        echo "Error resolving filename to asset id."
+        exit 2
+    fi
+
+    assert_url="$protocol//$host/api/v3/repos/$organization/$repository/releases/assets/$asset_id"
+
+    echo "=== fetching asset $assert_url"
+
+    curl -H "Authorization: token $token" -H 'Accept: application/octet-stream' -sL "$assert_url" -o "$local_file"
+}
+
+
 script_dir=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 base_dir=$(cd "${script_dir}/.." && pwd)
 
@@ -154,7 +204,7 @@ then
                 fetched_index_file=$(basename $url)
                 INDEX_LIST+="${url} "
                 echo "== fetching $url"
-                (curl -s -L ${url} -o $build_dir/$fetched_index_file)
+                download "${url}" "$build_dir/$fetched_index_file"
 
                 echo "== Adding stacks from index $url"
                 unset included
@@ -272,7 +322,7 @@ then
                                     if [ ! -f $prefetch_dir/$filename ]
                                     then
                                         echo "====== Downloading $prefetch_dir/$filename" 
-                                        curl -s -L $x -o $prefetch_dir/$filename
+                                        download "$x" "$prefetch_dir/$filename"
                                     fi
                                 fi
                             done
@@ -285,7 +335,7 @@ then
                                     if [ ! -f $prefetch_dir/$filename ]
                                     then
                                         echo "====== Downloading $prefetch_dir/$filename" 
-                                        curl -s -L $x -o $prefetch_dir/$filename
+                                        download "$x" "$prefetch_dir/$filename"
                                     fi
 
                                     echo "======== Re-packaging $prefetch_dir/$filename"

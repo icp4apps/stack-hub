@@ -20,7 +20,7 @@ Before building a Stack Hub repository you need to create the configuration that
 ### Including Appsody stacks
 Appsody stacks can be included in your Stack Hub by adding a configuration file with the following configuration to your Stack Hubs config folder:
 
-```
+```yaml
 # Template for repo-tools configuration
 name: <Repository name>
 description: <Repository description> 
@@ -29,10 +29,10 @@ stacks:
   - name: <Repository index name>
     repos:
       - url: <Reference to index file>
-      exclude:
-          - <stack name>
+        exclude:
+            - <stack name>
         include:
-          - <stack name>
+            - <stack name>
 image-org: <Organisation containing images within registry>
 image-registry: <Image registry hosting images>
 nginx-image-name: <Image name for the generated nginx image, defaults to repo-index>
@@ -49,7 +49,9 @@ where:
 `image-registry:` is the url of the image registry being used to store stack docker images. This field is optional and controls the behaviour of the repository build, further details are available below.  
 `nginx-image-name:` is the name assigned to the generated nginx image, defaults to repo-index.   
 
-**NOTE -** `exclude`/`include` are mutually exclusive, if both fields are populated an error will be thrown.
+**NOTES** 
+ * `exclude`/`include` are mutually exclusive, if both fields are populated an error will be thrown.
+ * If the stack index `url` follows the `https://<ghe host>/<organisation>/<repository>/releases/download/<version>/<file name>` format, the GitHub Enterprise API will be used to download the artifacts. To provide the access token for the GitHub Enterprise API, set an environment variable based on the server host name. For example, if your server is `github.example.com` set `GITHUB_EXAMPLE_COM_TOKEN` environment variable with the token.
 
 #### Composition of public stacks / repositories.
 If the stacks and repositories you are including are all publicly available then repo-tools can simply compose a new repository file that uses references to the existing stack asset locations. When this type of build is required simply leave the `image-org` and `image-registry` fields of your configuration empty. The composed repository files will be stored in the `assets` folder generated when the tools are run.
@@ -62,7 +64,7 @@ You can find an [example configuration](https://github.com/appsody/repo-tools/bl
 ### Including devfile stacks
 Devfile stacks can be included in your Stack Hub by adding a configuration file with the following configuration to your Stack Hubs config folder:
 
-```
+```yaml
 # Configuration for CP4A application stack CRD creation
 name: <Configuration name> 
 description: <Configuration description>
