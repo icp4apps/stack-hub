@@ -65,6 +65,17 @@ download() {
     fi
 }
 
+get_value() {
+    local configfile=$1
+    local property=$2
+    local value=$(yq r ${configfile} ${property})
+    if [ -z "$value" ]; then
+        echo "null"
+    else
+        echo "$value"
+    fi
+}
+
 download_ghe_asset() {
     local url=$1
     local local_file=$2
@@ -149,9 +160,9 @@ then
     REPO_LIST=""
     INDEX_LIST=""
         
-    image_org=$(yq r ${configfile} image-org)
-    image_registry=$(yq r ${configfile} image-registry)
-    nginx_image_name=$(yq r ${configfile} nginx-image-name)
+    image_org=$(get_value ${configfile} image-org)
+    image_registry=$(get_value ${configfile} image-registry)
+    nginx_image_name=$(get_value ${configfile} nginx-image-name)
 
     if [ "${image_org}" != "null" ] ||  [ "${image_registry}" != "null" ]
     then
@@ -211,7 +222,7 @@ then
                 unset excluded
                 
                 # check if we have any included stacks
-                included_stacks=$(yq r ${configfile} stacks[$stack_count].repos[$url_count].include)
+                included_stacks=$(get_value ${configfile} stacks[$stack_count].repos[$url_count].include)
                 if [ ! "${included_stacks}" == "null" ]
                 then
                     num_included=$(yq r ${configfile} stacks[$stack_count].repos[$url_count].include | wc -l)
@@ -225,7 +236,7 @@ then
 
                 # check if we have any excluded stacks
                 declare -a excluded
-                excluded_stacks=$(yq r ${configfile} stacks[$stack_count].repos[$url_count].exclude)
+                excluded_stacks=$(get_value ${configfile} stacks[$stack_count].repos[$url_count].exclude)
                 if [ ! "${excluded_stacks}" == "null" ]
                 then
                     num_excluded=$(yq r ${configfile} stacks[$stack_count].repos[$url_count].exclude | wc -l)
