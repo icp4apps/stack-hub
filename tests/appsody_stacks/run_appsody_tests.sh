@@ -53,7 +53,7 @@ for test_file in $test_dir/*_test.yaml; do
             # Get actual results
             assets_folder=$base_dir/assets/appsody_stacks
             build_folder=$base_dir/build/appsody_stacks
-            if [[ "$expected_image_registry" != null || "$expected_image_org" != null  ]]; then
+            if [[ -n "$expected_image_registry" || -n "$expected_image_org" ]]; then
                 result_file=$build_folder/index-src/$result_file_name
                 if [[ ! -f "$result_file" ]]; then
                     echo "No result file to insert overrides: $result_file"
@@ -106,7 +106,7 @@ for test_file in $test_dir/*_test.yaml; do
                 fi
             done
             # Check the image reistry and org are correct if overriden
-            if [[ "$expected_image_registry" != null || "$expected_image_org" != null  ]]; then
+            if [[ -n "$expected_image_registry" || -n "$expected_image_org" ]]; then
             for ((result_count=0;result_count<$results_stack_count;result_count++));
                 do
                     result_image=${image_paths[$result_count]}
@@ -119,14 +119,14 @@ for test_file in $test_dir/*_test.yaml; do
                     fi
                     result_reg=${image_parts[0]}
                     result_org=${image_parts[1]}
-                    if [[ "$expected_image_registry" != null ]]; then
+                    if [[ -n "$expected_image_registry" ]]; then
                         if [[ "$expected_image_registry" != "$result_reg" ]]; then
                             echo "Image registry mismatch, expected: $expected_image_registry, actual: $result_reg"
                             success="false"
                             break
                         fi
                     fi
-                    if [[ "$expected_image_org" != null ]]; then
+                    if [[ -n "$expected_image_org" ]]; then
                         if [[ "$expected_image_org" -ne "$result_org" ]]; then
                             echo "Image organisation mismatch, expected: $expected_image_org, actual: $result_org"
                             success="false"
@@ -136,7 +136,7 @@ for test_file in $test_dir/*_test.yaml; do
                 done
             fi
             # Check src url correctly updated
-            if [[ "$expected_image_registry" != null || "$expected_image_org" != null  ]]; then
+            if [[ -n "$expected_image_registry" || -n "$expected_image_org" ]]; then
             for ((result_count=0;result_count<$results_stack_count;result_count++));
                 do
                     result_src=${src_paths[$result_count]}

@@ -21,7 +21,7 @@ exec_hooks() {
 
 update_image() {
     local image="$1"
-    if [ "${image}" != "null" ]
+    if [ -n "${image}" ]
     then
         IFS='/' read -a image_parts <<< "$image"
         len=${#image_parts[@]}
@@ -29,20 +29,20 @@ update_image() {
         then
             image_parts=("docker.io" "${image_parts[@]}")
         fi
-        if [ "${image_registry}" != "null" ]
+        if [ -n "${image_registry}" ]
         then
             image_parts[0]="${image_registry}"
         fi
-        if [ "${image_org}" != "null" ]
+        if [ -n "${image_org}" ]
         then
             image_parts[1]="${image_org}"
         fi
     else
-        if [ "${image_registry}" != "null" ]
+        if [ -n "${image_registry}" ]
         then
             image_parts[0]="${image_registry}"
         fi
-        if [ "${image_org}" != "null" ]
+        if [ -n "${image_org}" ]
         then
             image_parts[1]="${image_org}"
         fi
@@ -153,7 +153,7 @@ then
     image_registry=$(yq r ${configfile} image-registry)
     nginx_image_name=$(yq r ${configfile} nginx-image-name)
 
-    if [ "${image_org}" != "null" ] ||  [ "${image_registry}" != "null" ]
+    if [ -n "${image_org}" ] ||  [ -n "${image_registry}" ]
     then
         echo "Retrieving and modifying all the assets"
         export BUILD_ALL=true
@@ -167,16 +167,16 @@ then
 
     # Set the default image_org and image_registry values if they 
     # have not been set in the config file
-    if [ "${image_org}" == "null" ]
+    if [ -z "${image_org}" ]
     then
             image_org="appsody"
     fi
 
-    if [ "${image_registry}" == "null" ]
+    if [ -z "${image_registry}" ]
     then
             image_registry="docker.io"
     fi
-    
+
     # count the number of stacks in the index file
     num_stacks=$(yq r ${configfile} stacks[*].name | wc -l)
     if [ $num_stacks -gt 0 ] 
@@ -212,7 +212,7 @@ then
                 
                 # check if we have any included stacks
                 included_stacks=$(yq r ${configfile} stacks[$stack_count].repos[$url_count].include)
-                if [ ! "${included_stacks}" == "null" ]
+                if [ -n "${included_stacks}" ]
                 then
                     num_included=$(yq r ${configfile} stacks[$stack_count].repos[$url_count].include | wc -l)
                     for ((included_count=0;included_count<$num_included;included_count++));
@@ -226,7 +226,7 @@ then
                 # check if we have any excluded stacks
                 declare -a excluded
                 excluded_stacks=$(yq r ${configfile} stacks[$stack_count].repos[$url_count].exclude)
-                if [ ! "${excluded_stacks}" == "null" ]
+                if [ -n "${excluded_stacks}" ]
                 then
                     num_excluded=$(yq r ${configfile} stacks[$stack_count].repos[$url_count].exclude | wc -l)
                     for ((excluded_count=0;excluded_count<$num_excluded;excluded_count++));

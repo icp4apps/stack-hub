@@ -52,7 +52,7 @@ then
         nginx_arg="--build-arg NGINX_IMAGE=$NGINX_IMAGE"
     fi
 
-    if [ "${nginx_image_name}" == "null" ] || [ "${nginx_image_name}" == "" ]
+    if [ -z "${nginx_image_name}" ]
     then
         nginx_image_name="stack-hub-index"
     fi
