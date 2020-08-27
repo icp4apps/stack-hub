@@ -97,7 +97,7 @@ then
                 
                 # check if we have any included stacks
                 included_stacks=$(yq r ${configfile} stack_groups[$group_count].repos[$url_count].include)
-                if [ ! "${included_stacks}" == "null" ]
+                if [ -n "${included_stacks}" ]
                 then
                     num_included=$(yq r ${configfile} stack_groups[$group_count].repos[$url_count].include | wc -l)
                     for ((included_count=0;included_count<$num_included;included_count++));
@@ -111,7 +111,7 @@ then
                 # check if we have any excluded stacks
                 declare -a excluded
                 excluded_stacks=$(yq r ${configfile} stack_groups[$group_count].repos[$url_count].exclude)
-                if [ ! "${excluded_stacks}" == "null" ]
+                if [ -n "${excluded_stacks}" ]
                 then
                     num_excluded=$(yq r ${configfile} stack_groups[$group_count].repos[$url_count].exclude | wc -l)
                     for ((excluded_count=0;excluded_count<$num_excluded;excluded_count++));
