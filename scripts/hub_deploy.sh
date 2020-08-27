@@ -7,9 +7,20 @@ build_dir="${base_dir}/build/appsody_stacks"
 
 
 prereqs() {
-    docker_cmd="docker"
-    command -v $docker_cmd >/dev/null 2>&1 || { docker_cmd="podman"; }
-    command -v $docker_cmd >/dev/null 2>&1 || { echo "Unable to deploy images: docker or podman are not installed."; exit 1; }
+    if [ -x "$(command -v podman)" ]; then
+        docker_cmd="podman"
+        if [ -n "${REGISTRY_AUTH_FILE}" ]; then
+            oc_image_args=(-a "${REGISTRY_AUTH_FILE}")
+        elif [ -n "${XDG_RUNTIME_DIR}" ] && [ -e "${XDG_RUNTIME_DIR}/containers/auth.json" ]; then
+            export REGISTRY_AUTH_FILE="${XDG_RUNTIME_DIR}/containers/auth.json"
+            oc_image_args=(-a "${REGISTRY_AUTH_FILE}")
+        fi
+    elif [ -x "$(command -v docker)" ]; then
+        docker_cmd="docker"
+    else
+        echo "Unable to deploy images: docker or podman are not installed."
+        exit 1
+    fi
 
     command -v oc >/dev/null 2>&1 || { echo "Unable to mirror images or deploy stack-hub-index: oc is not installed."; exit 1; }
 }
@@ -26,7 +37,7 @@ image_push() {
 
 image_mirror() {
     local file=$1
-    oc image mirror -f "$file" --insecure
+    oc image mirror -f "$file" --insecure ${oc_image_args[@]}
 }
 
 get_route() {
