@@ -1,5 +1,12 @@
 #!/bin/bash
 
+prereqs() {
+    if [ ! -x "$(command -v docker)" ] && [ ! -x "$(command -v buildah)" ]; then
+        echo "Unable to build stack-hub-index: docker or buildah are not installed."
+        exit 1
+    fi    
+}
+
 exec_hooks() {
     local dir=$1
     if [ -d $dir ]
@@ -101,6 +108,8 @@ download_ghe_asset() {
     curl -H "Authorization: token $token" -H 'Accept: application/octet-stream' -sL "$assert_url" -o "$local_file"
 }
 
+# check needed tools are installed
+prereqs
 
 script_dir=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 base_dir=$(cd "${script_dir}/.." && pwd)

@@ -2,7 +2,7 @@
 
 image_build() {
     local cmd="docker build"
-    if [ "$USE_BUILDAH" == "true" ]; then
+    if [ -x "$(command -v buildah)" ]; then
         cmd="buildah bud"
     fi
 
