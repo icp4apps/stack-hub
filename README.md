@@ -95,6 +95,12 @@ You can find an [example configuration](https://github.com/appsody/repo-tools/bl
 The stack hub can be built manually or via a CI pipeline such as Travis.
 
 ### Building the Stack Hub manually
+
+#### Prerequisites
+* Docker 17.05+ or (Podman 1.6.x+ and Buildah 1.9.0+) 
+* yq 3.x
+* jq 1.6+
+
 When building the Stack Hub manually any generated index files or CRD groupings will be written to the '`assets` folder at the base directory of the Stack Hub repository.
 
 To generate assets for your stack hub you need to execute the relevant build script passing the name of your configuration file. To generate assets for both types of configuration run both build scripts.
