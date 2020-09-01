@@ -21,7 +21,7 @@ openshift_deployment() {
     cp $base_dir/openshift/k8s.yaml $YAML_FILE
     sed -i -e "s|NGINX_IMAGE|$image_registry/$image_org/${nginx_image_name}:${INDEX_VERSION}|" $YAML_FILE
     sed -i -e "s|INIT_IMAGE|$INIT_IMAGE|" $YAML_FILE
-    sed -i -e "s|DATE|$(date --utc '+%FT%TZ')|" $YAML_FILE
+    sed -i -e "s|DATE|$(date -u '+%FT%TZ')|" $YAML_FILE
 
     mapping_file=$build_dir/image-mapping.txt
     grep -qxF "$SRC_INIT_IMAGE=$INIT_IMAGE" "$mapping_file" || echo "$SRC_INIT_IMAGE=$INIT_IMAGE" >> "$mapping_file"
