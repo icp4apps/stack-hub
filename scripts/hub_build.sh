@@ -144,7 +144,7 @@ then
     mkdir -p ${assets_dir}
     mkdir -p ${build_dir}
 
-    rm -f $build_dir/image_list $build_dir/image-mapping.txt
+    rm -f $build_dir/image_list
 
     REPO_LIST=""
     INDEX_LIST=""

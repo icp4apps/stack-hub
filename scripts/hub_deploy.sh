@@ -37,7 +37,10 @@ image_push() {
 
 image_mirror() {
     local file=$1
-    oc image mirror -f "$file" --insecure ${oc_image_args[@]}
+    while IFS='=' read -r src_image dst_image
+    do
+        oc image mirror --insecure ${oc_image_args[@]} --filter-by-os='.*' "$src_image" "$dst_image"
+    done < $file
 }
 
 get_route() {
