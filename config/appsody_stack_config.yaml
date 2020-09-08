@@ -1,6 +1,6 @@
 name: Cloud Pak for Applications Stack Hub
 description: This is the default stack hub for Cloud Pak for Applications
-version: 0.16.0
+version: 0.19.0
 stacks:
   - name: icp4apps-stack-hub
     repos:
@@ -13,7 +13,6 @@ stacks:
       - url: https://github.com/appsody/stacks/releases/download/java-openliberty-v0.2.15/incubator-index.yaml
         include: 
           - java-openliberty
-      - url: https://github.com/WASdev/ci.stack.websphere-traditional/releases/download/v0.3.2/java-websphere-traditional-0.3.2-index.yaml
 image-org:
 image-registry:
 nginx-image-name:
