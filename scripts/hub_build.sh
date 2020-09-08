@@ -364,7 +364,7 @@ then
                 if [ ! -z $BUILD ] && [ $BUILD == true ]
                 then
                     index_src=$build_dir/index-src/$(basename "$index_file_temp")
-                    sed -e "s|http.*:/.*/|{{EXTERNAL_URL}}/|" $index_file_temp > $index_src
+                    sed -e "s|http.*:/.*/|{{EXTERNAL_URL}}/|" -e "s|file:/.*/|{{EXTERNAL_URL}}/|" $index_file_temp > $index_src
                 fi
 
                 if [ "$CODEWIND_INDEX" == "true" ]
@@ -380,7 +380,7 @@ then
                             # flat json used by static appsody-index for codewind
                             index_src=$build_dir/index-src/$(basename "$codewind_file")
 
-                            sed -e "s|http.*/.*/|{{EXTERNAL_URL}}/|" $codewind_file > $index_src
+                            sed -e "s|http.*/.*/|{{EXTERNAL_URL}}/|" -e "s|file:/.*/|{{EXTERNAL_URL}}/|" $codewind_file > $index_src
                         done
                     fi
                 fi
