@@ -27,11 +27,7 @@ prereqs() {
 
 image_tag() {
     echo "== Tagging $@"
-    if [ "$docker_cmd" == "podman" ]; then
-        podman tag $1 $2
-    else
-        docker tag $1 $2
-    fi
+    $docker_cmd tag $1 $2
 }
 
 image_push() {
