@@ -25,6 +25,11 @@ prereqs() {
     command -v oc >/dev/null 2>&1 || { echo "Unable to mirror images or deploy stack-hub-index: oc is not installed."; exit 1; }
 }
 
+image_tag() {
+    echo "== Tagging $@"
+    $docker_cmd tag $1 $2
+}
+
 image_push() {
     local name=$@
     echo "== Pushing $name"
@@ -39,7 +44,12 @@ image_mirror() {
     local file=$1
     while IFS='=' read -r src_image dst_image
     do
-        oc image mirror --insecure ${oc_image_args[@]} --filter-by-os='.*' "$src_image" "$dst_image"
+        if [[ "$src_image" = "dev.local"* ]]; then
+            image_tag "$src_image" "$dst_image"
+            image_push "$dst_image"
+        else
+            oc image mirror --insecure ${oc_image_args[@]} --filter-by-os='.*' "$src_image" "$dst_image"
+        fi
     done < $file
 }
 
