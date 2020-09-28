@@ -10,7 +10,7 @@ stacks:
       - url: https://github.com/appsody/stacks/releases/download/quarkus-v0.5.1/incubator-index.yaml
         include: 
           - quarkus
-      - url: https://github.com/appsody/stacks/releases/download/java-openliberty-v0.2.15/incubator-index.yaml
+      - url: https://github.com/appsody/stacks/releases/download/java-openliberty-v0.2.16/incubator-index.yaml
         include: 
           - java-openliberty
 image-org:
