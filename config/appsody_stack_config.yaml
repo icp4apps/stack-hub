@@ -1,15 +1,12 @@
 name: Cloud Pak for Applications Stack Hub
 description: This is the default stack hub for Cloud Pak for Applications
-version: 0.19.0
+version: 0.20.0
 stacks:
   - name: icp4apps-stack-hub
     repos:
       - url: https://github.com/kabanero-io/collections/releases/download/0.9.0/java-spring-boot2-0.3.29-index.yaml
       - url: https://github.com/kabanero-io/collections/releases/download/0.9.0/nodejs-0.3.6-index.yaml
       - url: https://github.com/kabanero-io/collections/releases/download/0.9.0/nodejs-express-0.4.8-index.yaml
-      - url: https://github.com/appsody/stacks/releases/download/quarkus-v0.5.1/incubator-index.yaml
-        include: 
-          - quarkus
       - url: https://github.com/appsody/stacks/releases/download/java-openliberty-v0.2.16/incubator-index.yaml
         include: 
           - java-openliberty
