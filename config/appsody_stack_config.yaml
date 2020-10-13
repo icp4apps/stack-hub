@@ -4,10 +4,10 @@ version: 0.20.0
 stacks:
   - name: icp4apps-stack-hub
     repos:
-      - url: https://github.com/kabanero-io/collections/releases/download/0.10.1/java-spring-boot2-0.3.30-index.yaml
-      - url: https://github.com/kabanero-io/collections/releases/download/0.10.1/nodejs-0.4.0-index.yaml
-      - url: https://github.com/kabanero-io/collections/releases/download/0.10.1/nodejs-express-0.4.9-index.yaml
-      - url: https://github.com/appsody/stacks/releases/download/java-openliberty-v0.2.16/incubator-index.yaml
+      - url: https://github.com/kabanero-io/collections/releases/download/0.10.2/java-spring-boot2-0.3.31-index.yaml
+      - url: https://github.com/kabanero-io/collections/releases/download/0.10.2/nodejs-0.4.1-index.yaml
+      - url: https://github.com/kabanero-io/collections/releases/download/0.10.2/nodejs-express-0.4.10-index.yaml
+      - url: https://github.com/appsody/stacks/releases/download/java-openliberty-v0.2.17/incubator-index.yaml
         include: 
           - java-openliberty
 image-org:
