@@ -11,10 +11,9 @@ before_install:
   - ./scripts/install_jq.sh
 
 script:
-  #- ./scripts/hub_build.sh <appsody config>
-  #- ./scripts/crd_build.sh <odo config>
+  - ./scripts/hub_build.sh <appsody config>
   - ./scripts/list_artifacts.sh
-    
+  
 deploy:
   provider: releases
   skip_cleanup: true
