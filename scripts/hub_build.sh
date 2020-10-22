@@ -101,6 +101,8 @@ download_ghe_asset() {
     curl -H "Authorization: token $token" -H 'Accept: application/octet-stream' -sL "$assert_url" -o "$local_file"
 }
 
+# Generate .json file as well
+CODEWIND_INDEX=${CODEWIND_INDEX:-true}
 
 script_dir=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 base_dir=$(cd "${script_dir}/.." && pwd)
