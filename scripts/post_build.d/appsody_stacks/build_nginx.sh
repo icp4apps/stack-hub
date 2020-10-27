@@ -14,7 +14,7 @@ image_build() {
 }
 
 openshift_deployment() {
-    SRC_INIT_IMAGE="docker.io/icp4apps/pipelines-utils:0.20.0-rc.3"
+    SRC_INIT_IMAGE="docker.io/icp4apps/pipelines-utils:0.21.0-rc1"
     INIT_IMAGE="$image_registry/$image_org/$(echo $SRC_INIT_IMAGE | cut -d'/' -f3)"
 
     YAML_FILE=$build_dir/openshift.yaml

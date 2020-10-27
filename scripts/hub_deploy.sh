@@ -92,6 +92,7 @@ if [ -f "$build_dir/openshift.yaml" ]; then
     echo "= Deploying stack hub index container into your cluster."
     oc apply -f "$build_dir/openshift.yaml"
 
+    INDEX_YAML=$(cd $build_dir/index-src && ls *-index.yaml | head -n 1)
     STACK_HUB_ROUTE=$(get_route)
-    echo "== Your stack hub index is available at: $STACK_HUB_ROUTE/icp4apps-stack-hub-index.yaml"
+    echo "== Your stack hub index is available at: $STACK_HUB_ROUTE/$INDEX_YAML"
 fi
