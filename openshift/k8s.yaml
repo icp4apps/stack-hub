@@ -21,14 +21,20 @@ spec:
       serviceAccountName: stack-hub-index
       initContainers:
       - name: init
-        image: INIT_IMAGE
+        image: NGINX_IMAGE
         command: ['/bin/sh']
         args:
           - -cex
           - |
+            APISERVER=https://kubernetes.default.svc
+            SERVICEACCOUNT=/var/run/secrets/kubernetes.io/serviceaccount
+            NAMESPACE=$(cat ${SERVICEACCOUNT}/namespace)
+            TOKEN=$(cat ${SERVICEACCOUNT}/token)
+            CACERT=${SERVICEACCOUNT}/ca.crt
             for i in 1 2 3 4 5 6 7 8 9 10; do
-              ROUTE=$(kubectl get route stack-hub-index --no-headers -o=jsonpath='{.status.ingress[0].host}')
-              if [ -z "$ROUTE" ]; then
+              ROUTE=$(curl --cacert ${CACERT} --header "Authorization: Bearer ${TOKEN}" -X GET -s \
+                           ${APISERVER}/apis/route.openshift.io/v1/namespaces/$NAMESPACE/routes/stack-hub-index | jq -r .status.ingress[0].host)
+              if [ -z "$ROUTE" ] || [ "$ROUTE" = "null" ]; then
                 sleep 1
               else
                 echo "http://$ROUTE" > /usr/share/stack-hub/route

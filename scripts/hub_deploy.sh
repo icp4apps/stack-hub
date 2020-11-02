@@ -72,7 +72,9 @@ prereqs
 
 # push nginx image
 if [ -f "$build_dir/image_list" ]; then
+    echo
     echo "= Pushing stack hub index image into your registry."
+    echo
     while read line
     do
         if [ "$line" != "" ]; then
@@ -83,13 +85,17 @@ fi
 
 # mirror stack images
 if [ -f "$build_dir/image-mapping.txt" ]; then
+    echo
     echo "= Mirroring stack and related images into your registry."
+    echo
     image_mirror "$build_dir/image-mapping.txt"
 fi 
 
 # deploy nginx container
 if [ -f "$build_dir/openshift.yaml" ]; then
+    echo
     echo "= Deploying stack hub index container into your cluster."
+    echo
     oc apply -f "$build_dir/openshift.yaml"
 
     INDEX_YAML=$(cd $build_dir/index-src && ls *-index.yaml | head -n 1)
