@@ -2,28 +2,32 @@
 This repository provides a default Stack Hub for IBM Cloud Pak for Applications.
 
 ## repository structure
-The repository contains four folders:
-1) config - This folder is where the configuration file that defines the content of the Stack Hub repository will be placed.
-2) scripts - This folder contains the scripts that will compose the Stack Hub repository
-3) example_config - This folder contains sample configuration files.
-4) templates - This folder contains template configuration files that can be used as a starting point for a Stack Hub repositories configuration.
+The repository contains the following folders:
+- `config` - This folder is where the configuration file that defines the content of the Stack Hub repository will be placed.
+- `scripts` - This folder contains the scripts that will compose the Stack Hub repository.
+- `example_config` - This folder contains sample configuration files.
+- `templates` - This folder contains template configuration files that can be used as a starting point for a Stack Hub repository configuration.
+- `openshift` - This folder contains Kubernetes configuration files.
 
 ## Stack Hub Repository
 A Stack Hub repository is a collection of meta-data for a group of stacks. Stack Hub repositories support Appsody development stacks.
 
 ### Creating a Stack Hub repository
-repo-tools is a template repository and should be used as the base for your Stack Hub repository. To create a Stack Hub repository follow the [GitHub documentation](https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/creating-a-repository-from-a-template) using the [icp4apps/repo-tools](https://github.com/icp4apps/repo-tools) repository as the template.
+
+For a step-by-step guide to creating a stack repository that includes a worked example, see [Creating a custom stack hub](https://www.ibm.com/support/knowledgecenter/SSCSJL_4.3.x/guides/creating-a-stack-hub/creating-a-stack-hub.html).
+
+`stack-hub` is a template repository and should be used as the base for your Stack Hub repository. To create a Stack Hub repository follow the [GitHub documentation](https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/creating-a-repository-from-a-template) using the [icp4apps/stack-hub](https://github.com/icp4apps/stack-hub) repository as the template.
 
 ## Defining your configuration
 Before building a Stack Hub repository you need to create the configuration that identifies what the repository will include.
 
 ### Including Appsody stacks
-Appsody stacks can be included in your Stack Hub by adding a configuration file with the following configuration to your Stack Hubs config folder:
+Appsody stacks can be included in your Stack Hub by adding a configuration file with the following configuration to your Stack Hub `config` folder:
 
 ```yaml
 # Template for repo-tools configuration
 name: <Repository name>
-description: <Repository description> 
+description: <Repository description>
 version: <Repository version>
 stacks:
   - name: <Repository index name>
@@ -35,7 +39,7 @@ stacks:
             - <stack name>
 image-org: <Organisation containing images within registry>
 image-registry: <Image registry hosting images>
-nginx-image-name: <Image name for the generated nginx image, defaults to repo-index>
+nginx-image-name: <Image name for the generated NGINX image, defaults to stack-hub-index>
 ```
 where:  
 `name:` is an identifier for this particular configuration  
@@ -47,9 +51,9 @@ where:
 `stacks:   repos:    -url:    include:` is an array of stack names to include from the referenced stack repository. This field is optional and should be left blank if filtering is not required.  
 `image-org:` is the name of the organisation within the image registry which will store the docker images for included stacks. This field is optional and controls the behaviour of the repository build, further details are available below.  
 `image-registry:` is the url of the image registry being used to store stack docker images. This field is optional and controls the behaviour of the repository build, further details are available below.  
-`nginx-image-name:` is the name assigned to the generated nginx image, defaults to repo-index.   
+`nginx-image-name:` is the name assigned to the generated NGINX image, defaults to `stack-hub-index`.   
 
-**NOTES** 
+**NOTES**
  * `exclude`/`include` are mutually exclusive, if both fields are populated an error will be thrown.
  * If the stack index `url` follows the `https://<ghe host>/<organisation>/<repository>/releases/download/<version>/<file name>` format, the GitHub Enterprise API will be used to download the artifacts. To provide the access token for the GitHub Enterprise API, set an environment variable based on the server host name. For example, if your server is `github.example.com` set `GITHUB_EXAMPLE_COM_TOKEN` environment variable with the token.
 
@@ -68,7 +72,7 @@ The stack hub can be built manually or via a CI pipeline such as Travis.
 ### Building the Stack Hub manually
 
 #### Prerequisites
-* Docker 17.05+ or (Podman 1.6.x+ and Buildah 1.9.0+) 
+* Docker 17.05+ or (Podman 1.6.x+ and Buildah 1.9.0+)
 * yq 3.x
 * jq 1.6+
 
