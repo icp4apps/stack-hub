@@ -7,10 +7,10 @@ stacks:
       - url: https://github.com/kabanero-io/collections/releases/download/0.10.4/java-spring-boot2-0.3.32-index.yaml
       - url: https://github.com/kabanero-io/collections/releases/download/0.10.4/nodejs-0.4.2-index.yaml
       - url: https://github.com/kabanero-io/collections/releases/download/0.10.4/nodejs-express-0.4.11-index.yaml
-      - url: https://github.com/appsody/stacks/releases/download/java-openliberty-v0.2.19/incubator-index.yaml
+      - url: https://github.com/appsody/stacks/releases/download/java-openliberty-v0.2.20/incubator-index.yaml
         include: 
           - java-openliberty
-      - url: https://github.com/WASdev/ci.stack.websphere-traditional/releases/download/v0.3.3/java-websphere-traditional-0.3.3-index.yaml
+      - url: https://github.com/WASdev/ci.stack.websphere-traditional/releases/download/v0.3.4/java-websphere-traditional-0.3.3-index.yaml
 image-org:
 image-registry:
 nginx-image-name:
